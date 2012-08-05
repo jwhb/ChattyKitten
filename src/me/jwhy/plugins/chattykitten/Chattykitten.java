@@ -18,7 +18,7 @@ public class Chattykitten extends JavaPlugin implements Listener {
 	private String header_after = ChatColor.AQUA + "]======";
 	
     public void onDisable() {
-        // TODO: Place any custom disable code here.
+        
     }
 
     public void onEnable() {
@@ -36,6 +36,7 @@ public class Chattykitten extends JavaPlugin implements Listener {
     	    		event.setCancelled(true);
     	    		String mobname = receiver.getType().toString();
     	    		
+    	    		sender.sendMessage("");
     	    		sender.sendMessage(
     	    				header_before + ChatColor.GOLD + "Chatty" + ChatColor.YELLOW 
     	    				+ firstUpper(mobname) + header_after
