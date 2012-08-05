@@ -5,3 +5,4 @@ main: me.jwhy.plugins.chattykitten.Chattykitten
 name: ChattyKitten
 startup: postworld
 version: '1.0'
+description: 'ChattyKitten offers a way for you to track your animal''s health and age'
