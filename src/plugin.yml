@@ -4,5 +4,16 @@ generator: http://dinnerbone.com/minecraft/tools/pluginator/
 main: me.jwhy.plugins.chattykitten.Chattykitten
 name: ChattyKitten
 startup: postworld
-version: '1.0'
+version: '1.1'
 description: 'ChattyKitten offers a way for you to track your animal''s health and age'
+permissions:
+  chattykitten.type.*:
+    description: See stats for any type of entity
+    default: true
+  chattykitten.player.*:
+    description: 'See stats for any player (requires chattykitten.type.player)'
+    default: true
+  chattykitten.exempt:
+    description: 'Player''s stats are private'
+  chattykitten.admin:
+    description: Player overrides exemptions
