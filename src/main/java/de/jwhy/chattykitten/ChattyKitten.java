@@ -85,14 +85,14 @@ public class ChattyKitten extends JavaPlugin implements Listener {
 			sender.sendMessage("Gamemode: " + colgm + firstUpper(receiverplayer.getGameMode().toString()));
 		}                 
 		
-		Integer maxh = receiver.getMaxHealth();
-		Integer acth = receiver.getHealth();
+		int maxh = (int) receiver.getMaxHealth();
+		int acth = (int) receiver.getHealth();
 		
-		String healthbar = this.getChatBarAndRaw("Health", acth, maxh);
+		String healthbar = this.getChatBarAndRaw(ColorPurpose.HEALTH, acth, maxh);
 		sender.sendMessage("Health: " + healthbar);
 		
 		if(receiver instanceof Ageable){
-			Integer ageticks = ((Ageable) receiver).getAge();
+			int ageticks = ((Ageable) receiver).getAge();
 			String agemessage;
 			if((int)ageticks >= 0){
 				agemessage = ChatColor.DARK_GREEN + "Adult";
@@ -138,7 +138,7 @@ public class ChattyKitten extends JavaPlugin implements Listener {
     	}
     }
     
-    private String getChatBarAndRaw(String purpose, int current, int maximal){
+    private String getChatBarAndRaw(ColorPurpose purpose, int current, int maximal){
 		String chatbarandraw = this.getChatBar(purpose, current, maximal);
 		Double part = (double) current / maximal;
 		ChatColor partcolor;
@@ -157,7 +157,7 @@ public class ChattyKitten extends JavaPlugin implements Listener {
     	return chatbarandraw;
     }
     
-    private String getChatBar(String purpose, int current, int maximal){
+    private String getChatBar(ColorPurpose purpose, int current, int maximal){
 
     	String healthsymbol = "|";
     	String chatbar = "";
@@ -190,14 +190,14 @@ public class ChattyKitten extends JavaPlugin implements Listener {
 		return chatbar;    	
     }
     
-    private HashMap<String, Float> getColorDivision(String purpose){
+    private HashMap<String, Float> getColorDivision(ColorPurpose purpose){
     	HashMap<String, Float> divs = new HashMap<String, Float>();
-    	switch(purpose.toUpperCase()){
-    		case "HEALTH":
+    	switch(purpose){
+    		case HEALTH:
     			divs.put("LOW", 0f);
     			divs.put("MIDDLE", 0.3f);
     			divs.put("HIGH", 0.75f);
-    		case "HUNGER":
+    		case HUNGER:
     			divs.put("LOW", 0f);
     			divs.put("MIDDLE", 0.3f);
     			divs.put("HIGH", 0.75f);
@@ -207,6 +207,10 @@ public class ChattyKitten extends JavaPlugin implements Listener {
     			divs.put("HIGH", 0.66f);
     	}
     	return divs;
+    }
+    
+    private enum ColorPurpose{
+    	HEALTH, HUNGER, OTHER
     }
 }
 
