@@ -25,70 +25,96 @@ public class Chattykitten extends JavaPlugin implements Listener {
         getServer().getPluginManager().registerEvents(this, this);
     }
 
-    @EventHandler
+    @EventHandler(ignoreCancelled = true)
     public void onEntityDamageByEntityEvent(org.bukkit.event.entity.EntityDamageByEntityEvent event) {
     	if(event.getEntity() instanceof org.bukkit.entity.LivingEntity){
     		LivingEntity receiver = (LivingEntity) event.getEntity();
     		if(event.getDamager() instanceof Player){
     			Player sender = (Player)event.getDamager();
-    			if(sender.isSneaking()){
-    	    		event.setDamage(0);
-    	    		event.setCancelled(true);
-    	    		String mobname = receiver.getType().toString();
+    			if((sender.hasPermission("chattykitten.type." + receiver.getType().toString())
+    					|| sender.hasPermission("chattykitten.type.*"))
+    					&& sender.isSneaking()) {
+    				if(receiver instanceof Player){
+    					if((sender.hasPermission("chattykitten.player." + ((Player) receiver).getName().toString())
+    							|| sender.hasPermission("chattykitten.player.*"))
+    							&& (sender.hasPermission("chattykitten.admin")
+    									|| ((Player) receiver).hasPermission("chattykitten.exempt") == false)){
+    						event.setDamage(0);
+    						event.setCancelled(true);
+	    	    			
+    						getChatty(sender, receiver);
+    					}
+    				} else {
+    					event.setDamage(0);
+    					event.setCancelled(true);
     	    		
-    	    		sender.sendMessage("");
-    	    		sender.sendMessage(
-    	    				header_before + ChatColor.GOLD + "Chatty" + ChatColor.YELLOW 
-    	    				+ firstUpper(mobname) + header_after
-    	    		);
-    	    		
-    	    		Integer maxh = receiver.getMaxHealth();
-    	    		Integer acth = receiver.getHealth();
-    	    		
-    	    		if(receiver instanceof Player){
-    	    			Player receiverplayer = ((Player) receiver).getPlayer();
-    	    			String playergm = receiverplayer.getGameMode().toString();
-    	    			ChatColor colgm = null;
-    	    			if(playergm == "SURVIVAL"){
-    	    				colgm = ChatColor.DARK_RED;
-    	    			}else if(playergm == "CREATIVE"){
-    	    				colgm = ChatColor.DARK_GREEN;
-    	    			}else{
-    	    				colgm = ChatColor.DARK_RED;
-    	    			}
-    	    			sender.sendMessage("Gamemode: " + colgm + firstUpper(receiverplayer.getGameMode().toString()));
-    	    		}
-    	    		
-    	    		String healthbar = this.getChatBarAndRaw("Health", acth, maxh);
-    	    		sender.sendMessage("Health: " + healthbar);
-    	    		
-    	    		if(receiver instanceof Ageable){
-    	    			Integer ageticks = ((Ageable) receiver).getAge();
-    	    			String agemessage;
-    	    			if((int)ageticks >= 0){
-    	    				agemessage = ChatColor.DARK_GREEN + "Adult";
-    	    			}else{
-    	    				agemessage = ChatColor.GOLD + "Baby (" 
-		    						+ ageticks / -20 / 60
-    	    						+ "m left)";
-    	    				
-    	    			}
-    		    		sender.sendMessage("Growth: " + agemessage);
-    	    		}
-    	    		
-    				if(receiver instanceof Tameable){
-    	    			String ownermessage = "Owner: ";
-    	    			if((((Tameable) receiver).isTamed()) == false){
-    	    				ownermessage = ownermessage + ChatColor.RED + "Not tamed yet";
-    	    			}else{
-    	    				ownermessage = ownermessage
-    	    						+ getDisplayNameAll(((OfflinePlayer)((Tameable) receiver).getOwner()).getName());
-    	    			}
-    	    			sender.sendMessage(ownermessage);
-    	    		}
-    	    	}
+    					getChatty(sender, receiver);
+    				}
+    			}
     		}
     	}
+    }
+    
+    private void getChatty(Player sender, LivingEntity receiver) {
+		String mobname = receiver.getType().toString();
+		
+		sender.sendMessage("");
+		sender.sendMessage(
+				header_before + ChatColor.GOLD + "Chatty" + ChatColor.YELLOW 
+				+ firstUpper(mobname) + header_after
+		);
+		
+		if(receiver instanceof Player){
+			Player receiverplayer = ((Player) receiver).getPlayer();
+
+			String rname = receiverplayer.getName().toString();
+			String rnick = receiverplayer.getDisplayName().toString();
+			getLogger().info("Name: " + rname + "; Nick: " + rnick);
+			if(rname != null) sender.sendMessage("Name: " + rname);
+			if(rnick != null && rnick != rname) sender.sendMessage("Nickname: " + rnick);
+
+			String playergm = receiverplayer.getGameMode().toString();
+			ChatColor colgm = null;
+			if(playergm == "SURVIVAL"){
+				colgm = ChatColor.DARK_RED;
+			}else if(playergm == "CREATIVE"){
+				colgm = ChatColor.DARK_GREEN;
+			}else{
+				colgm = ChatColor.DARK_RED;
+			}
+			sender.sendMessage("Gamemode: " + colgm + firstUpper(receiverplayer.getGameMode().toString()));
+		}                 
+		
+		Integer maxh = receiver.getMaxHealth();
+		Integer acth = receiver.getHealth();
+		
+		String healthbar = this.getChatBarAndRaw("Health", acth, maxh);
+		sender.sendMessage("Health: " + healthbar);
+		
+		if(receiver instanceof Ageable){
+			Integer ageticks = ((Ageable) receiver).getAge();
+			String agemessage;
+			if((int)ageticks >= 0){
+				agemessage = ChatColor.DARK_GREEN + "Adult";
+			}else{
+				agemessage = ChatColor.GOLD + "Baby (" 
+						+ ageticks / -20 / 60
+						+ "m left)";
+				
+			}
+    		sender.sendMessage("Growth: " + agemessage);
+		}
+		
+		if(receiver instanceof Tameable){
+			String ownermessage = "Owner: ";
+			if((((Tameable) receiver).isTamed()) == false){
+				ownermessage = ownermessage + ChatColor.RED + "Not tamed yet";
+			}else{
+				ownermessage = ownermessage
+						+ getDisplayNameAll(((OfflinePlayer)((Tameable) receiver).getOwner()).getName());
+			}
+			sender.sendMessage(ownermessage);
+		}    	
     }
     
     private String firstUpper(String content){
