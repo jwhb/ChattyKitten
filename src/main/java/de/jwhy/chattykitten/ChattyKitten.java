@@ -1,4 +1,4 @@
-package me.jwhy.plugins.chattykitten;
+package de.jwhy.chattykitten;
 
 import java.util.HashMap;
 
@@ -13,7 +13,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 
-public class Chattykitten extends JavaPlugin implements Listener {
+public class ChattyKitten extends JavaPlugin implements Listener {
 	private String header_before = ChatColor.AQUA + "======[";
 	private String header_after = ChatColor.AQUA + "]======";
 	
