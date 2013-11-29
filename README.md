@@ -5,7 +5,10 @@ ChattyKitten offers a way for you to track your animal's health and age
 
 ----------
 
-### How to ask ChattyMobs ###
+Check out this great showcase video [OliverFrenchie](https://www.youtube.com/user/ModernGamingStudios) made:<br>
+[Minecraft Bukkit Plugin Showcase | CHATTYKITTEN!](http://www.youtube.com/watch?v=igC7xIOF91c)
+
+### How to use ChattyKitten ###
 Sneak down (usually shiftkey) and attack a mob (usually left-click).
 
 Don't worry, the targeted mob won't be hurt at all!
@@ -26,7 +29,6 @@ To let your players use ChattyKitten **you don't have to  manually assign permis
 
 ### Future features ###
 * Food level (for Players)
-* Toggleable 'asking' (Players can disable the feature for theirselves)
 
 <br><br>
 Feel free to ask questions, report bugs or request new features as you like!
